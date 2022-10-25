@@ -28,6 +28,7 @@
     <nohttp-checkstyle.version>0.0.4.RELEASE</nohttp-checkstyle.version>
     <spring-format.version>0.0.27</spring-format.version>
 
+    <nexus.host.url>http://188.166.202.207:8081</nexus.host.url>
   </properties>
 
   <dependencies>
@@ -112,6 +113,19 @@
       <optional>true</optional>
     </dependency>
   </dependencies>
+
+  <distributionManagement>
+    <repository>
+      <id>nexus</id>
+      <name>Maven Release Repository</name>
+      <url>${nexus.host.url}/repository/mavn-hosted-rel/</url>
+    </repository>
+    <snapshotRepository>
+      <id>nexus</id>
+      <name>Maven Snapshot Repository</name>
+      <url>${nexus.host.url}/repository/mavn-hosted-snap/</url>
+    </snapshotRepository>
+  </distributionManagement>  
 
   <build>
     <plugins>

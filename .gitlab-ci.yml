@@ -3,10 +3,14 @@
 default:
   image: maven:3.8.2-openjdk-11
 
+variables:
+  M2_EXTRA_OPTIONS: "-s .m2/settings.xml"
+  
 stages:
   - check
   - build
   - sonarscan
+  - push
 
 .check-version:
   stage: check
@@ -34,3 +38,8 @@ sonarscan:
     name: sonarsource/sonar-scanner-cli:latest
   script:
    - sonar-scanner -Dsonar.qualitygate.wait=true
+
+push-to-nexus:
+  stage: push
+  script:
+    - mvn $M2_EXTRA_OPTIONS deploy
