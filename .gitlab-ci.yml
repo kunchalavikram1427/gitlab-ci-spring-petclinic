@@ -1,0 +1,7 @@
+stages:
+  - check
+
+check-version:
+  stage: check
+  script:
+    - mvn --version
