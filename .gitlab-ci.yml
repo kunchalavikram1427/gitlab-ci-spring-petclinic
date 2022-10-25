@@ -5,19 +5,21 @@ default:
 
 variables:
   M2_EXTRA_OPTIONS: "-s .m2/settings.xml"
+  IMAGE_NAME: spring-petclinic
   
 stages:
   - check
   - build
   - sonarscan
   - push
+  - dockerize
 
 .check-version:
   stage: check
   script:
     - mvn --version
 
-.build-job:
+build-job:
   stage: build
   script:
     - echo "Building the WAR file"
@@ -39,7 +41,21 @@ stages:
   script:
    - sonar-scanner -Dsonar.qualitygate.wait=true
 
-push-to-nexus:
+.push-to-nexus:
   stage: push
   script:
     - mvn $M2_EXTRA_OPTIONS deploy
+
+dockerize:
+  stage: dockerize
+  services:
+    - docker:dind
+  image: docker:latest
+  before_script:
+    - docker login -u $USERNAME -p $PASSWORD
+  script:
+    - docker build -t $USERNAME/$IMAGE_NAME:$CI_COMMIT_SHA .
+    - docker tag $USERNAME/$IMAGE_NAME:$CI_COMMIT_SHA $USERNAME/$IMAGE_NAME:latest
+    - docker push $USERNAME/$IMAGE_NAME:$CI_COMMIT_SHA
+    - docker push $USERNAME/$IMAGE_NAME:latest
+
