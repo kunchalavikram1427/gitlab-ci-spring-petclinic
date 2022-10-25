@@ -62,7 +62,9 @@ stages:
 
 deploy-to-kubernetes:
   stage: deploy
-  image: kunchalavikram/kubectl_helm_cli:latest
+  image: 
+    name: kunchalavikram/kubectl_helm_cli:latest  # Helm
+    entrypoint: [""]
   before_script:
     - mkdir -p ~/.kube
     - cat "$KUBECONFIG" > ~/.kube/config 
