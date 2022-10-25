@@ -1,9 +1,12 @@
+# sqp_f24fe3dc6557611d13db76f464be6b517c5eb5b4
+
 default:
   image: maven:3.8.2-openjdk-11
 
 stages:
   - check
   - build
+  - sonarscan
 
 .check-version:
   stage: check
@@ -16,3 +19,18 @@ build-job:
     - echo "Building the WAR file"
     - mvn package
     - ls -l target/*.war
+  artifacts:
+    paths:
+      - target/
+    expire_in: 1 week
+
+sonarscan:
+  stage: sonarscan
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" 
+    SONAR_HOST_URL: http://174.138.104.191:9000
+    SONAR_TOKEN: sqp_f24fe3dc6557611d13db76f464be6b517c5eb5b4
+  image:
+    name: sonarsource/sonar-scanner-cli:latest
+  script:
+   - sonar-scanner -Dsonar.qualitygate.wait=true
