@@ -28,7 +28,7 @@ build-job:
       - target/
     expire_in: 1 week
 
-sonarscan:
+.sonarscan:
   stage: sonarscan
   variables:
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" 
