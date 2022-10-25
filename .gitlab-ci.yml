@@ -17,7 +17,7 @@ stages:
   script:
     - mvn --version
 
-build-job:
+.build-job:
   stage: build
   script:
     - echo "Building the WAR file"
