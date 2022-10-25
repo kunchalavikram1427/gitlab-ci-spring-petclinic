@@ -69,5 +69,5 @@ deploy-to-kubernetes:
     - mkdir -p ~/.kube
     - cat "$KUBECONFIG" > ~/.kube/config 
   script:
-    - helm list
+    - helm upgrade --install petclinic petclinic-chart/
 
