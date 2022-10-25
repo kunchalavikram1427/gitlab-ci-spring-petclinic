@@ -1,10 +1,18 @@
 default:
   image: maven:3.8.2-openjdk-11
-  
+
 stages:
   - check
+  - build
 
-check-version:
+.check-version:
   stage: check
   script:
     - mvn --version
+
+build-job:
+  stage: build
+  script:
+    - echo "Building the WAR file"
+    - mvn package
+    - ls -l target/*.war
