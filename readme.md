@@ -114,7 +114,18 @@ CI_REGISTRY_IMAGE: docker.io/youruser/yourrepo
 CI_REGISTRY_PASSWORD: yourpassword
 CI_REGISTRY_USER: Yourdockeruserid
 ```
+```
+dockerize:
+  stage: dockerize
+  image:
+    name: gcr.io/kaniko-project/executor:v1.9.0-debug
+    entrypoint: [""]
+  script:
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context "${CI_PROJECT_DIR}" --destination "$USERNAME/$IMAGE_NAME:$TAG"
 
+```
 ## Install SonarQube
 ```
 helm repo add sonarqube https://SonarSource.github.io/helm-chart-sonarqube

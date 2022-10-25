@@ -13,13 +13,14 @@ stages:
   - sonarscan
   - push
   - dockerize
+  - deploy
 
 .check-version:
   stage: check
   script:
     - mvn --version
 
-build-job:
+.build-job:
   stage: build
   script:
     - echo "Building the WAR file"
@@ -46,7 +47,7 @@ build-job:
   script:
     - mvn $M2_EXTRA_OPTIONS deploy
 
-dockerize:
+.dockerize:
   stage: dockerize
   services:
     - docker:dind
@@ -58,4 +59,13 @@ dockerize:
     - docker tag $USERNAME/$IMAGE_NAME:$CI_COMMIT_SHA $USERNAME/$IMAGE_NAME:latest
     - docker push $USERNAME/$IMAGE_NAME:$CI_COMMIT_SHA
     - docker push $USERNAME/$IMAGE_NAME:latest
+
+deploy-to-kubernetes:
+  stage: deploy
+  image: kunchalavikram/kubectl_helm_cli:latest
+  before_script:
+    - mkdir -p ~/.kube
+    - cat "$KUBECONFIG" > ~/.kube/config 
+  script:
+    - helm list
 
