@@ -18,12 +18,12 @@ stages:
   - dockerize
   - deploy
 
-.check-version:
+check-version:
   stage: check
   script:
     - mvn --version
 
-.build-job:
+build-job:
   stage: build
   script:
     - echo "Building the WAR file"
@@ -34,7 +34,7 @@ stages:
       - target/
     expire_in: 1 week
 
-.sonarscan:
+sonarscan:
   stage: sonarscan
   variables:
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" 
@@ -45,7 +45,7 @@ stages:
   script:
    - sonar-scanner -Dsonar.qualitygate.wait=true
 
-.push-to-nexus:
+push-to-nexus:
   stage: push
   script:
     - mvn $M2_EXTRA_OPTIONS deploy
@@ -60,7 +60,7 @@ dockerize:
     - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${USERNAME}" "${PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context "${CI_PROJECT_DIR}" --destination "$USERNAME/$IMAGE_NAME:$TAG"
 
-.deploy-to-kubernetes:
+deploy-to-kubernetes:
   stage: deploy
   image: 
     name: kunchalavikram/kubectl_helm_cli:latest  # Helm
