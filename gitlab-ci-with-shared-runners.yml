@@ -2,13 +2,10 @@
 
 default:
   image: maven:3.8.2-openjdk-11
-  tags:
-    - k8s
 
 variables:
   M2_EXTRA_OPTIONS: "-s .m2/settings.xml"
   IMAGE_NAME: spring-petclinic
-  TAG: $CI_COMMIT_SHA
   
 stages:
   - check
@@ -50,17 +47,20 @@ stages:
   script:
     - mvn $M2_EXTRA_OPTIONS deploy
 
-dockerize:
+.dockerize:
   stage: dockerize
-  image:
-    name: gcr.io/kaniko-project/executor:v1.9.0-debug
-    entrypoint: [""]
+  services:
+    - docker:dind
+  image: docker:latest
+  before_script:
+    - docker login -u $USERNAME -p $PASSWORD
   script:
-    - mkdir -p /kaniko/.docker
-    - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${USERNAME}" "${PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context "${CI_PROJECT_DIR}" --destination "$USERNAME/$IMAGE_NAME:$TAG"
+    - docker build -t $USERNAME/$IMAGE_NAME:$CI_COMMIT_SHA .
+    - docker tag $USERNAME/$IMAGE_NAME:$CI_COMMIT_SHA $USERNAME/$IMAGE_NAME:latest
+    - docker push $USERNAME/$IMAGE_NAME:$CI_COMMIT_SHA
+    - docker push $USERNAME/$IMAGE_NAME:latest
 
-.deploy-to-kubernetes:
+deploy-to-kubernetes:
   stage: deploy
   image: 
     name: kunchalavikram/kubectl_helm_cli:latest  # Helm
