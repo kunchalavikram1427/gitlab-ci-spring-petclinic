@@ -6,8 +6,20 @@ https://youtube.com/playlist?list=PL8klaCXyIuQ46vZOchy-fSregRq1YdPBF
 ```
 ## Youtube Video URL for this End to End Demo
 ```
-TODO
+https://youtu.be/6i1t7JcEOds
 ```
+
+## Pre-Requisites
+```
+DigitalOcean Account: Get free 125 USD DigitalOcean cloud credits to try Kubernetes for 60 days. Sign up using this link: https://m.do.co/c/150b2fde3db0
+Install Kubectl on Windows: https://youtu.be/G9MmLUsBd3g
+Install Helm on Windows: https://youtu.be/ZKAlKoqlWac
+Deploy Nexus on DigitalOcean: https://youtu.be/PzDnj_SGAQM
+Deploy SonarQube on DigitalOcean: https://youtu.be/A0L1krD5l3c
+Creating Kubernetes Cluster on DigitalOcean: https://youtu.be/_soteDvxaAk
+GitLab Account: https://youtu.be/uqTqOwfosbw
+```
+
 ## Understanding the Spring Petclinic application with a few diagrams
 <a href="https://speakerdeck.com/michaelisvy/spring-petclinic-sample-application">See the presentation here</a>
 
